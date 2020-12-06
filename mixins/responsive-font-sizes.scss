@@ -1,0 +1,95 @@
+// SCSS Dependancies
+$font-base: 16px !default;
+$mqs-min: (
+  big-palm-and-up: 537px,
+  lap-and-up: 768px,
+  desk: 1024px,
+);
+
+// Full media query mixin found in `./media-query`
+@mixin media-query($media-query) {
+  @each $mq, $width in $mqs-min {
+    @if $media-query == $mq {
+      @media only screen and (min-width: $width) {
+        @content;
+      }
+    }
+  }
+}
+
+// Actual mixin (above dependancies ideally live elsewhere)
+@mixin responsive-font-sizes($args: ()) {
+  $args: map-merge(
+    (
+      base: $font-base,
+      palm: null,
+      lap: null,
+      desk: null,
+    ),
+    $args
+  );
+  $mqs: (
+    big-palm-and-up: map-get($args, palm),
+    lap-and-up: map-get($args, lap),
+    desk: map-get($args, desk),
+  );
+
+  font-size: map-get($args, base);
+
+  @each $mq, $font-size in $mqs {
+    @if $font-size {
+      @include media-query($mq) {
+        font-size: $font-size;
+      }
+    }
+  }
+}
+
+/**
+** Usage
+.my-heading-a {
+  @include responsive-font-sizes(
+    (
+      base: 20px,
+      lap: 28px,
+    )
+  )
+}
+
+// Outputted CSS
+.my-heading-a {
+  font-size: 20px;
+
+  @media only screen and (min-width: 768px) {
+    font-size: 28px;
+  }
+}
+
+.my-heading-b {
+  @include responsive-font-sizes(
+    (
+      base: 14px,
+      palm: 16px,
+      lap: 18px,
+      desk: 20px,
+    )
+  )
+}
+
+// Outputted CSS
+.my-heading-b {
+  font-size: 14px;
+
+  @media only screen and (min-width: 537px) {
+    font-size: 16px;
+  }
+
+  @media only screen and (min-width: 768px) {
+    font-size: 18px;
+  }
+
+  @media only screen and (min-width: 1024px) {
+    font-size: 20px;
+  }
+}
+**/
