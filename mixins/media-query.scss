@@ -1,0 +1,74 @@
+// Some common screen widths 
+// Personally I would only use betoween 3 and 4 of these
+$mq-micro: 320px;
+$mq-small: 480px;
+$mq-big-palm: 540px;
+$mq-medium: 768px;
+$mq-large: 1024px;
+$mq-extra-large: 1200px;
+$mq-giant: 1440px;
+$mq-monster: 1920px;
+
+$mqs-min: (
+  // >= 320px
+    micro-and-up: $mq-micro,
+  // >= 480px
+    small-and-up: $mq-small,
+  // >= 540px
+    big-palm-and-up: $mq-big-palm,
+  // >= 768px
+    lap-and-up: $mq-medium,
+  // >= 1024px
+    desk: $mq-large,
+  // >= 1200px
+    desk-wide: $mq-extra-large,
+  // >= 1440px
+    giant: $mq-giant,
+  // >= 1920px
+    monster: $mq-monster
+);
+
+// Requires removal of one unit to ovoid the weird 1px gap collision
+$mqs-max: (
+  // <= 479px
+    small-down: $mq-small - 1,
+  // <= 767px
+    medium-down: $mq-medium - 1,
+  // <= 1023px
+    desk-down: $mq-desk - 1
+);
+
+@mixin media-query($media-query) {
+  // Loop over sass map for minimum width mqs
+  // Using respond-min() mixin below
+  @each $mq, $width in $mqs-min {
+    @if $media-query == $mq {
+      @include respond-min($width) {
+        @content;
+      }
+    }
+  }
+
+  // AVOID using this when possible
+  // Loop over sass map for for maximum width mqs
+  // Using respond-max() mixin below
+  @each $mq, $width in $mqs-max {
+    @if $media-query == $mq {
+      @include respond-max($width) {
+        @content;
+      }
+    }
+  }
+}
+
+@mixin respond-min($width) {
+  @media only screen and (min-width: $width) {
+    @content;
+  }
+}
+
+@mixin respond-max($width) {
+  @media only screen and (max-width: $width) {
+    @content;
+  }
+}

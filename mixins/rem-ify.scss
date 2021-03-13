@@ -1,0 +1,28 @@
+@function calculate-rem($size) {
+  $remSize: $size / $font-base;
+
+  @return #{$remSize}rem;
+}
+
+@function strip-unit($num) {
+  @return $num / ($num * 0 + 1);
+}
+
+@mixin rem-ify($property, $values...) {
+  $pxValues: ();
+  $remValues: ();
+
+  @each $value in $values {
+    @if ($value == 'inherit') {
+      $pxValues: append($pxValues, #{$value});
+      $remValues: append($remValues, $value);
+    } @else {
+      $unitlessValue: strip-unit($value);
+      $pxValues: append($pxValues, #{$unitlessValue}px);
+      $remValues: append($remValues, calculate-rem($unitlessValue));
+    }
+  }
+
+  #{$property}: $pxValues;
+  #{$property}: $remValues;
+}

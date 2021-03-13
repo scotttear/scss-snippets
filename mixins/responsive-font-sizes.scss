@@ -1,12 +1,12 @@
-// SCSS Dependancies
+// Example SCSS vars used in mixin
 $font-base: 16px !default;
 $mqs-min: (
-  big-palm-and-up: 537px,
-  lap-and-up: 768px,
-  desk: 1024px,
+  small-up: 480px,
+  lap-up: 768px,
+  desk-up: 1024px,
 );
 
-// Full media query mixin found in `./media-query`
+// Full media-query mixin found in `./media-query`
 @mixin media-query($media-query) {
   @each $mq, $width in $mqs-min {
     @if $media-query == $mq {
@@ -17,21 +17,21 @@ $mqs-min: (
   }
 }
 
-// Actual mixin (above dependancies ideally live elsewhere)
+// Actual mixin (above dependencies ideally live elsewhere)
 @mixin responsive-font-sizes($args: ()) {
   $args: map-merge(
     (
       base: $font-base,
-      palm: null,
+      small: null,
       lap: null,
       desk: null,
     ),
     $args
   );
   $mqs: (
-    big-palm-and-up: map-get($args, palm),
-    lap-and-up: map-get($args, lap),
-    desk: map-get($args, desk),
+    small-up: map-get($args, small),
+    lap-up: map-get($args, lap),
+    desk-up: map-get($args, desk),
   );
 
   font-size: map-get($args, base);
@@ -45,9 +45,8 @@ $mqs-min: (
   }
 }
 
-/**
-** Usage
-.my-heading-a {
+// Code Examples 
+.heading-a {
   @include responsive-font-sizes(
     (
       base: 20px,
@@ -57,7 +56,7 @@ $mqs-min: (
 }
 
 // Outputted CSS
-.my-heading-a {
+.heading-a {
   font-size: 20px;
 
   @media only screen and (min-width: 768px) {
@@ -65,11 +64,11 @@ $mqs-min: (
   }
 }
 
-.my-heading-b {
+.heading-b {
   @include responsive-font-sizes(
     (
       base: 14px,
-      palm: 16px,
+      small: 16px,
       lap: 18px,
       desk: 20px,
     )
@@ -77,7 +76,7 @@ $mqs-min: (
 }
 
 // Outputted CSS
-.my-heading-b {
+.heading-b {
   font-size: 14px;
 
   @media only screen and (min-width: 537px) {
@@ -92,4 +91,3 @@ $mqs-min: (
     font-size: 20px;
   }
 }
-**/
